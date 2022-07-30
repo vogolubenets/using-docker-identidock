@@ -20,7 +20,16 @@ if [ $ERR -eq 0 ]; then
 
   IP=$(sudo docker inspect -f {{.NetworkSettings.Networks.bridge.IPAddress}} jenkins-identidock-1)
   CODE=$(curl -sL -w "%{http_code}" $IP:9090/monster/bla -o /dev/null)
-  if [ $CODE -ne 200 ]; then
+  if [ $CODE -eq 200 ]; then
+    echo "Test passed -- Tagging."
+    HASH=$(git rev-parse --short HEAD)
+    sudo docker tag -f jenkins_identidock vogolubenets/identidock:$HASH
+    sudo docker tag -f jenkins_identidock vogolubenets/identidock:newest
+    echo "Pushing..."
+    sudo docker login -e golubenets2010@yandex.ru -u vogolubenets -p "A</4Pxy^;N[fGqh@F(oV"
+    sudo docker push vogolubenets/identidock:$HASH
+    sudo docker push vogolubenets/identidock:newest
+  else
     echo "Site returned" $CODE
     ERR=1
   fi
