@@ -3,7 +3,6 @@ services:
     build: .
     expose:
       - "9090"
-    network_mode: "bridge"
     environment:
       ENV: PROD
     links:
@@ -12,8 +11,6 @@ services:
 
   dnmonster:
     image: amouat/dnmonster:1.0
-    network_mode: "bridge"
 
   redis:
     image: redis:3.0
-    network_mode: "bridge"
